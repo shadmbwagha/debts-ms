@@ -6,6 +6,7 @@ use App\Http\controllers\CustomerController;
 use App\Http\controllers\CreditController;
 use App\Http\controllers\DebtController;
 use App\Http\controllers\AuthController;
+use App\Http\controllers\BalanceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,3 +49,4 @@ Route::post('/credit', [CreditController::class, 'store']);
 Route::put('/credit/{credit}', [CreditController::class, 'update']);
 Route::delete('credit/{credit}', [CreditController::class, 'destroy']);
 
+Route::get('/balance', [BalanceController::class, 'index']);

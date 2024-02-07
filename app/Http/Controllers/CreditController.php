@@ -10,7 +10,26 @@ class CreditController extends Controller
 {
     public function index()
     {
-        return Credit::all();
+        $credits = Credit::with('customer')->get();
+
+        $creditsWithCustomerInfo = $credits->groupBy('customer_id')->map(function ($creditsForCustomer) {
+            $totalAmount = $creditsForCustomer->sum('amount');
+
+            return [
+                'customer_id' => $creditsForCustomer->first()->customer->id,
+                'customer_name' => $creditsForCustomer->first()->customer->name,
+                'total_amount' => $totalAmount,
+                'debts' => $creditsForCustomer->map(function ($credit) {
+                    return [
+                        'credit_id' => $credit->id,
+                        'amount' => $credit->amount,
+                        // Add other debt attributes as needed
+                    ];
+                }),
+            ];
+        });
+
+        return response()->json($creditsWithCustomerInfo);
     }
     
 
